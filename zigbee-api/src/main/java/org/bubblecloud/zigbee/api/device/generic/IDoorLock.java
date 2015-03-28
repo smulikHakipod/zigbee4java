@@ -20,7 +20,7 @@
    limitations under the License.
 */
 
-package org.bubblecloud.zigbee.api.device.security_safety;
+package org.bubblecloud.zigbee.api.device.generic;
 
 import org.bubblecloud.zigbee.api.ZigBeeApiConstants;
 import org.bubblecloud.zigbee.api.cluster.general.Groups;
@@ -38,7 +38,7 @@ import org.bubblecloud.zigbee.api.Device;
  */
 public interface IDoorLock extends Device {
 
-    public static final int DEVICE_ID = 0x0101;
+    public static final int DEVICE_ID = 0x00A;
     public static final String NAME = "Door Lock";
     public static final int[] MANDATORY = ArraysUtil.append(Device.MANDATORY, new int[]{
             ZigBeeApiConstants.CLUSTER_ID_ON_OFF, ZigBeeApiConstants.CLUSTER_ID_DOOR_LOCK, ZigBeeApiConstants.CLUSTER_ID_SCENES, ZigBeeApiConstants.CLUSTER_ID_GROUPS

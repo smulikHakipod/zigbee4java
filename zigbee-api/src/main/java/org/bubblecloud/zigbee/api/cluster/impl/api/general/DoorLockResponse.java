@@ -20,7 +20,7 @@
    limitations under the License.
 */
 
-package org.bubblecloud.zigbee.api.cluster.impl.api.general.security;
+package org.bubblecloud.zigbee.api.cluster.impl.api.general;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Response;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Status;

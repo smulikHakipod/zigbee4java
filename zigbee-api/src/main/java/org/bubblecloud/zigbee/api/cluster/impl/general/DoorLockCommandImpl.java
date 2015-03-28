@@ -1,4 +1,4 @@
-package org.bubblecloud.zigbee.api.cluster.impl.general.security;
+package org.bubblecloud.zigbee.api.cluster.impl.general;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 
