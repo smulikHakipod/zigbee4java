@@ -30,7 +30,7 @@ import org.bubblecloud.zigbee.api.cluster.impl.api.core.Reporter;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Response;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Status;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
-import org.bubblecloud.zigbee.api.cluster.impl.api.general.security.DoorLockResponse;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLockResponse;
 import org.bubblecloud.zigbee.api.cluster.impl.api.global.DefaultResponse;
 import org.bubblecloud.zigbee.api.cluster.impl.general.DoorLockCluster;
 import org.bubblecloud.zigbee.network.ZigBeeEndpoint;

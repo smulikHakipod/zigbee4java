@@ -37,7 +37,6 @@ import org.bubblecloud.zigbee.api.device.security_safety.IASAncillaryControlEqui
 import org.bubblecloud.zigbee.api.device.security_safety.IASControlAndIndicatingEquipment;
 import org.bubblecloud.zigbee.api.device.security_safety.IAS_Warning;
 import org.bubblecloud.zigbee.api.device.security_safety.IAS_Zone;
-import org.bubblecloud.zigbee.api.device.security_safety.IDoorLock;
 import org.bubblecloud.zigbee.api.device.impl.*;
 import org.bubblecloud.zigbee.api.DeviceBase;
 import org.bubblecloud.zigbee.network.port.ZigBeeNetworkManagerImpl;

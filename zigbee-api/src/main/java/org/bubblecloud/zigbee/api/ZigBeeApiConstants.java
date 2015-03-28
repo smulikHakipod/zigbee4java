@@ -26,7 +26,7 @@ import org.bubblecloud.zigbee.api.cluster.impl.api.HVAC.FanControl;
 import org.bubblecloud.zigbee.api.cluster.impl.api.HVAC.PumpConfigurationAndControl;
 import org.bubblecloud.zigbee.api.cluster.impl.api.HVAC.Thermostat;
 import org.bubblecloud.zigbee.api.cluster.impl.api.HVAC.ThermostatUserInterfaceConfiguration;
-import org.bubblecloud.zigbee.api.cluster.impl.api.closures.DoorLock;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLock;
 import org.bubblecloud.zigbee.api.cluster.impl.api.closures.ShadeConfiguration;
 import org.bubblecloud.zigbee.api.cluster.impl.api.closures.WindowCovering;
 import org.bubblecloud.zigbee.api.cluster.impl.api.general.*;
@@ -239,7 +239,7 @@ public class ZigBeeApiConstants {
 
         try{
             String id = Integer.toHexString(deviceID);
-            if(id.startsWith("0"))
+            if(id.startsWith("0") || id.length() == 1)
                 return "Generic";
             else if(id.startsWith("1"))
                 return "Lighting";

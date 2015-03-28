@@ -22,19 +22,19 @@
 
 package org.bubblecloud.zigbee.api.cluster.impl.general;
 
-import org.bubblecloud.zigbee.api.cluster.impl.api.closures.DoorLock;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLock;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Response;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
 import org.bubblecloud.zigbee.api.cluster.impl.api.general.OnOff;
-import org.bubblecloud.zigbee.api.cluster.impl.api.general.security.*;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLockResponse;
 import org.bubblecloud.zigbee.api.cluster.impl.attribute.Attributes;
 import org.bubblecloud.zigbee.api.cluster.impl.core.AttributeImpl;
 import org.bubblecloud.zigbee.api.cluster.impl.core.EmptyPayloadCommand;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ZCLClusterBase;
-import org.bubblecloud.zigbee.api.cluster.impl.general.security.DoorLockCommandImpl;
-import org.bubblecloud.zigbee.api.cluster.impl.general.security.DoorLockResponseImpl;
+import org.bubblecloud.zigbee.api.cluster.impl.general.DoorLockCommandImpl;
+import org.bubblecloud.zigbee.api.cluster.impl.general.DoorLockResponseImpl;
 import org.bubblecloud.zigbee.api.cluster.impl.global.DefaultResponseImpl;
 import org.bubblecloud.zigbee.network.ZigBeeEndpoint;
 

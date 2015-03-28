@@ -31,7 +31,7 @@ import org.bubblecloud.zigbee.api.cluster.general.Groups;
 import org.bubblecloud.zigbee.api.cluster.general.DoorLock;
 import org.bubblecloud.zigbee.api.cluster.general.OnOff;
 import org.bubblecloud.zigbee.api.cluster.general.Scenes;
-import org.bubblecloud.zigbee.api.device.security_safety.IDoorLock;
+import org.bubblecloud.zigbee.api.device.generic.IDoorLock;
 import org.bubblecloud.zigbee.api.DeviceBase;
 
 public class DoorLockDevice extends DeviceBase implements IDoorLock {
