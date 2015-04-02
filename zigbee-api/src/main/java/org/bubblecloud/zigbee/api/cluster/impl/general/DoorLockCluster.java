@@ -39,6 +39,7 @@ public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
 
 	private static AttributeImpl description;
 	private static AttributeImpl lockState;
+	private static AttributeImpl doorState;
 	private final Attribute[] attributes;
 	
 	public DoorLockCluster(ZigBeeEndpoint zbDevice){
@@ -46,7 +47,8 @@ public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
 		
 		description = new AttributeImpl(zbDevice,this, Attributes.DESCRIPTION);
 		lockState = new AttributeImpl(zbDevice,this, Attributes.LOCK_STATE);
-		attributes = new AttributeImpl[]{description, lockState};
+		doorState = new AttributeImpl(zbDevice,this, Attributes.DOOR_STATE);
+		attributes = new AttributeImpl[]{description, lockState, doorState};
 	}
 
 	public DoorLockResponse lock() throws ZigBeeClusterException {
@@ -57,7 +59,7 @@ public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
 	
 	public DoorLockResponse lock(String pinCode) throws ZigBeeClusterException {
 		 enableDefaultResponse();
-	     Response response = invoke(new DoorCommandImpl(true, pinCode).set);
+	     Response response = invoke(new DoorCommandImpl(true, pinCode));
 	     return new DoorLockResponseImpl(response);
 	}
 
@@ -88,10 +90,6 @@ public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
 		return description;
 	}
 
-	
-	public Attribute getAttributeLockState() {
-		return lockState;
-	}
 	
 
 }

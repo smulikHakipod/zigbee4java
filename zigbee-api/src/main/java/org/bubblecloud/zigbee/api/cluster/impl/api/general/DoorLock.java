@@ -50,5 +50,4 @@ public interface DoorLock extends ZCLCluster {
    public DoorLockResponse lock(String pinCode) throws ZigBeeClusterException;
 	
    public Attribute getAttributeDescription();
-   public Attribute getAttributeLockState();
 }

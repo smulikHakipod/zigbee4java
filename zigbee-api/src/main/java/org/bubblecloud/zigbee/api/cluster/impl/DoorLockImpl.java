@@ -117,15 +117,5 @@ public class DoorLockImpl implements DoorLock {
 			throw new ZigBeeDeviceException(e);
 		}
 	}
-	
-    
-	public int getLockState() throws ZigBeeDeviceException {
-		 try {
-	            return (int)doorLockCluster.getAttributeLockState().getValue();
-	        } catch (ZigBeeClusterException e) {
-	            throw new ZigBeeDeviceException(e);
-	        }
-	}
-
 
 }

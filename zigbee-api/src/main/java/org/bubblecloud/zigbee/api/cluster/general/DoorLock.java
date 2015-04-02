@@ -42,7 +42,6 @@ public interface DoorLock extends Cluster {
 	 
    void lock(String pinCode) throws ZigBeeDeviceException;
 
-   void unlock() throws ZigBeeDeviceException;
+   void unlock(String pinCode) throws ZigBeeDeviceException;
 
-   int getLockState() throws ZigBeeDeviceException;
 }

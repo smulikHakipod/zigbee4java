@@ -39,7 +39,14 @@ public class Attributes {
 		    .setReportable(true)
 		    .setZigBeeType(ZigBeeType.UnsignedInteger8bit)
 		    .setWritable(false);
-	
+
+    final static public   AttributeDescriptor DOOR_STATE = new AbstractAttribute()
+            .setId(0x3)
+            .setName("DoorState")
+            .setReportable(true)
+            .setZigBeeType(ZigBeeType.UnsignedInteger8bit)
+            .setWritable(false);
+
     final static public  AttributeDescriptor ON_OFF = new AbstractAttribute()
             .setId(0x0000)
             .setName("OnOff")
