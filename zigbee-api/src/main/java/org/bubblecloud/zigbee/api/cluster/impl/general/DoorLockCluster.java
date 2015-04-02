@@ -85,7 +85,6 @@ public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
 	}
 
 
-
 	public Attribute getAttributeDescription() {
 		return description;
 	}
