@@ -1,20 +1,27 @@
 package org.bubblecloud.zigbee.api.cluster.impl.general;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLock;
 
-public class DoorLockCommandImpl implements Command {
-	
+public class DoorCommandImpl implements Command {
+
+	private byte id;
 	private String pinCode;
-	public DoorLockCommandImpl()
+	public DoorCommandImpl(boolean lock)
 	{
-		
+		if(lock) {
+			this.id = DoorLock.LOCK_ID;
+		} else {
+			this.id = DoorLock.UNLOCK_ID;
+		}
 	}
 	
-	public DoorLockCommandImpl(String pinCode)
+	public DoorCommandImpl(boolean lock, String pinCode)
 	{
+		this(lock);
 		this.pinCode = pinCode;
 	}
-	
+
 	@Override
 	public boolean isManufacturerExtension() {
 		// TODO Auto-generated method stub

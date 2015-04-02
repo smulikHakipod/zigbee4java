@@ -26,16 +26,10 @@ import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLock;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Response;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
-import org.bubblecloud.zigbee.api.cluster.impl.api.general.OnOff;
 import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLockResponse;
 import org.bubblecloud.zigbee.api.cluster.impl.attribute.Attributes;
 import org.bubblecloud.zigbee.api.cluster.impl.core.AttributeImpl;
-import org.bubblecloud.zigbee.api.cluster.impl.core.EmptyPayloadCommand;
-import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ZCLClusterBase;
-import org.bubblecloud.zigbee.api.cluster.impl.general.DoorLockCommandImpl;
-import org.bubblecloud.zigbee.api.cluster.impl.general.DoorLockResponseImpl;
-import org.bubblecloud.zigbee.api.cluster.impl.global.DefaultResponseImpl;
 import org.bubblecloud.zigbee.network.ZigBeeEndpoint;
 
 
@@ -57,14 +51,20 @@ public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
 
 	public DoorLockResponse lock() throws ZigBeeClusterException {
 		 enableDefaultResponse();
-	     Response response = invoke(new DoorLockCommandImpl());
+	     Response response = invoke(new DoorCommandImpl(true));
 	     return new DoorLockResponseImpl(response);
 	}
 	
 	public DoorLockResponse lock(String pinCode) throws ZigBeeClusterException {
 		 enableDefaultResponse();
-	     Response response = invoke(new DoorLockCommandImpl(pinCode));
+	     Response response = invoke(new DoorCommandImpl(true, pinCode).set);
 	     return new DoorLockResponseImpl(response);
+	}
+
+	public DoorLockResponse unlock(String pinCode) throws ZigBeeClusterException {
+		enableDefaultResponse();
+		Response response = invoke(new DoorCommandImpl(false, pinCode));
+		return new DoorLockResponseImpl(response);
 	}
 
 	@Override
