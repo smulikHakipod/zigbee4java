@@ -8,6 +8,7 @@ import org.bubblecloud.zigbee.api.ZigBeeDeviceException;
 import org.bubblecloud.zigbee.api.cluster.Cluster;
 import org.bubblecloud.zigbee.api.cluster.general.LevelControl;
 import org.bubblecloud.zigbee.api.cluster.general.OnOff;
+import org.bubblecloud.zigbee.api.cluster.general.DoorLock;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ReportListener;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Reporter;
@@ -75,6 +76,8 @@ public final class ZigBeeConsole {
 		commands.put("unsubscribe", new UnsubscribeCommand());
 		commands.put("read", 		new ReadCommand());
 		commands.put("write", 		new WriteCommand());
+		commands.put("door", 		new DoorCommand());
+		
 	}
 
 	/**
@@ -744,6 +747,49 @@ public final class ZigBeeConsole {
         }
     }
 
+    
+    /**
+     * Switches a device off.
+     */
+    private class DoorCommand implements ConsoleCommand {
+        /**
+         * {@inheritDoc}
+         */
+        public String getDescription() {
+            return "Switches door off.";
+        }
+        /**
+         * {@inheritDoc}
+         */
+        public String getSyntax() {
+            return "off DEVICEID";
+        }
+        /**
+         * {@inheritDoc}
+         */
+        public boolean process(final ZigBeeApi zigbeeApi, final String[] args) {
+            if (args.length != 2) {
+                return false;
+            }
+
+            final Device device = getDeviceByIndexOrEndpointId(zigbeeApi, args[1]);
+            if (device == null) {
+                return false;
+            }
+            final DoorLock doorLock = device.getCluster(DoorLock.class);
+            
+            try {
+				doorLock.lock("1234");
+			} catch (ZigBeeDeviceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+            return true;
+        }
+    }
+    
+    
     /**
      * Switches a device off.
      */

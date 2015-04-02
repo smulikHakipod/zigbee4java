@@ -113,7 +113,7 @@ public class ZigBeeApi implements EndpointListener, DeviceListener {
 
         final Map<Class<?>, Class<?>> deviceIntefaceImplemetnationMap = new HashMap<Class<?>, Class<?>>();
         deviceIntefaceImplemetnationMap.put(ColorDimmableLight.class, ColorDimmableLightDevice.class);
-        //deviceIntefaceImplemetnationMap.put(DimmableLight.class, DimmableLightDevice.class);
+        deviceIntefaceImplemetnationMap.put(DimmableLight.class, DimmableLightDevice.class);
         deviceIntefaceImplemetnationMap.put(IAS_Zone.class, IAS_ZoneDevice.class);
         deviceIntefaceImplemetnationMap.put(IASAncillaryControlEquipment.class, IASAncillaryControlEquipmentDevice.class);
         deviceIntefaceImplemetnationMap.put(IASControlAndIndicatingEquipment.class, IASControlAndIndicatingEquipmentDevice.class);
