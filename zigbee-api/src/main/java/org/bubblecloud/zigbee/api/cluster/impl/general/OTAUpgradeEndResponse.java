@@ -9,19 +9,17 @@ import java.nio.ByteBuffer;
 /**
  * Created by yaronshani on 4/3/15.
  */
-public class OTAQueryImageResponse implements Command {
-    byte id;
-    byte status;
+public class OTAUpgradeEndResponse implements Command {
     OTAFileID fileID;
-    int imageSize;
+    int currentTime;
+    int upgradeTime;
 
-    public OTAQueryImageResponse(byte status, OTAFileID fileID, int imageSize)
-    {
-        this.id = OTA.COMMAND_QUERY_NEXT_IMAGE_RSP;
-        this.status = status ;
+    public OTAUpgradeEndResponse(OTAFileID fileID, int currentTime, int upgradeTime) {
         this.fileID = fileID;
-        this.imageSize = imageSize;
+        this.currentTime = currentTime;
+        this.upgradeTime = upgradeTime;
     }
+
 
     public byte getHeaderCommandId() {
         return 0;
@@ -45,8 +43,10 @@ public class OTAQueryImageResponse implements Command {
 
     public byte[] getPayload()
     {
-        byte[] imageSize = ByteBuffer.allocate(2).putInt(this.imageSize).array();
-        return ArrayUtils.addAll(ArrayUtils.addAll(new byte[] { this.status }, this.fileID.getPayload()), imageSize);
+        byte[] currentTime = ByteBuffer.allocate(4).putInt(this.currentTime).array();
+        byte[] upgradeTime = ByteBuffer.allocate(4).putInt(this.upgradeTime).array();
+        //need to find a better way to do this
+        return ArrayUtils.addAll(ArrayUtils.addAll(this.fileID.getPayload(), currentTime), upgradeTime);
     }
 
     public byte[] getAllowedResponseId() {

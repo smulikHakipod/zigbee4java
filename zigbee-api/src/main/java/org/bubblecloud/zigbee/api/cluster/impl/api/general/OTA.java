@@ -25,6 +25,7 @@ package org.bubblecloud.zigbee.api.cluster.impl.api.general;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZCLCluster;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
+import org.bubblecloud.zigbee.api.cluster.impl.general.OTAFirmware;
 
 
 /**
@@ -43,12 +44,24 @@ public interface OTA extends ZCLCluster {
 
    static final byte COMMAND_QUERY_NEXT_IMAGE_REQ = 0x1;
    static final byte COMMAND_QUERY_NEXT_IMAGE_RSP = 0x2;
+   static final byte COMMAND_IMAGE_BLOCK_REQ = 0x3;
+   static final byte COMMAND_IMAGE_BLOCK_RSP = 0x5;
+   static final byte COMMAND_UPGRADE_END_REQ = 0x6;
+   static final byte COMMAND_UPGRADE_END_RSP = 0x7;
    static final byte NO_IMAGE = (byte) 0x98;
 
-   static final byte PAYLOAD_MAX_LEN_QUERY_NEXT_IMAGE_REQ = 0x11;
-   static final byte PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ = 0x9;
 
-   public void sendImageNotify();
+
+   static final byte PAYLOAD_MAX_LEN_IMAGE_BLOCK_REQ = 24;
+   static final byte PAYLOAD_MIN_LEN_IMAGE_BLOCK_REQ = 14;
+
+   static final byte PAYLOAD_MAX_LEN_QUERY_NEXT_IMAGE_REQ = 11;
+   static final byte PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ = 9;
+
+   static final byte PAYLOAD_MAX_LEN_UPGRADE_END_REQ = 9;
+   static final byte PAYLOAD_MIN_LEN_UPGRADE_END_REQ = 1;
+
+   public void sendImageNotify(OTAFirmware firmware);
 	
    public Attribute getAttributeDescription();
 }

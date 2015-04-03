@@ -9,9 +9,9 @@ import java.util.Arrays;
  * Created by yaronshani on 4/3/15.
  */
 public class OTAFileID {
-    private int manufacturer;
-    private int type;
-    private int version;
+    public int manufacturer;
+    public int type;
+    public int version;
 
     public OTAFileID(int manufacturer, int type, int version)
     {
