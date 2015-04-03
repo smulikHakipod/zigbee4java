@@ -20,13 +20,13 @@
    limitations under the License.
 */
 
-package org.bubblecloud.zigbee.api.cluster.impl.general;
+package org.bubblecloud.zigbee.api.cluster.impl.general.closures;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Response;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Status;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZBDeserializer;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
-import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLockResponse;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.closures.DoorLockResponse;
 import org.bubblecloud.zigbee.api.cluster.impl.core.DefaultDeserializer;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ResponseImpl;
 

@@ -41,6 +41,12 @@ public interface OTA extends ZCLCluster {
    static final String NAME = "OTA";
    static final String DESCRIPTION = "Over the air software update.";
 
+   static final byte COMMAND_QUERY_NEXT_IMAGE_REQ = 0x1;
+   static final byte COMMAND_QUERY_NEXT_IMAGE_RSP = 0x2;
+
+   static final byte PAYLOAD_MAX_LEN_QUERY_NEXT_IMAGE_REQ = 0x11;
+   static final byte PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ = 0x9;
+
    public void sendImageNotify();
 	
    public Attribute getAttributeDescription();

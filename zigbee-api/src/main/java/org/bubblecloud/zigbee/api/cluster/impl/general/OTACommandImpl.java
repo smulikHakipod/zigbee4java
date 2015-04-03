@@ -2,24 +2,17 @@ package org.bubblecloud.zigbee.api.cluster.impl.general;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLock;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.OTA;
 
-public class DoorCommandImpl implements Command {
+public class OTACommandImpl implements Command {
 
 	private byte id;
-	private String pinCode;
-	public DoorCommandImpl(boolean lock)
+	private byte[] payload;
+
+	public OTACommandImpl(OTAQueryImageResponse cmd)
 	{
-		if(lock) {
-			this.id = DoorLock.LOCK_ID;
-		} else {
-			this.id = DoorLock.UNLOCK_ID;
-		}
-	}
-	
-	public DoorCommandImpl(boolean lock, String pinCode)
-	{
-		this(lock);
-		this.pinCode = pinCode;
+		this.id = OTA.COMMAND_QUERY_NEXT_IMAGE_RSP;
+		this.payload = cmd.getPayload();
 	}
 
 	@Override
@@ -42,12 +35,7 @@ public class DoorCommandImpl implements Command {
 	
 	@Override
 	public byte[] getPayload() {
-		// TODO Auto-generated method stub
-		if (this.pinCode != null) {
-			return (Character.toChars(this.pinCode.length())[0] + this.pinCode).getBytes();
-		} else {
-			return new byte[] {};
-		}
+		return this.payload;
 		
 	}
 	

@@ -22,63 +22,85 @@
 
 package org.bubblecloud.zigbee.api.cluster.impl.general;
 
-import org.bubblecloud.zigbee.api.cluster.impl.api.general.DoorLock;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
-import org.bubblecloud.zigbee.api.cluster.impl.api.core.Response;
+import org.bubblecloud.zigbee.api.cluster.impl.api.core.Status;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
-import org.bubblecloud.zigbee.api.cluster.impl.api.general.closures.DoorLockResponse;
+import org.bubblecloud.zigbee.api.cluster.impl.api.general.OTA;
 import org.bubblecloud.zigbee.api.cluster.impl.attribute.Attributes;
 import org.bubblecloud.zigbee.api.cluster.impl.core.AttributeImpl;
+import org.bubblecloud.zigbee.api.cluster.impl.core.ResponseImpl;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ZCLClusterBase;
-import org.bubblecloud.zigbee.api.cluster.impl.general.closures.DoorCommandImpl;
-import org.bubblecloud.zigbee.api.cluster.impl.general.closures.DoorLockResponseImpl;
+import org.bubblecloud.zigbee.network.ClusterFilter;
+import org.bubblecloud.zigbee.network.ClusterListener;
+import org.bubblecloud.zigbee.network.ClusterMessage;
 import org.bubblecloud.zigbee.network.ZigBeeEndpoint;
 
 
-public class DoorLockCluster extends ZCLClusterBase implements DoorLock {
-	
-	
+public class OTACluster extends ZCLClusterBase implements OTA{
+
+
 
 	private static AttributeImpl description;
-	private static AttributeImpl lockState;
-	private static AttributeImpl doorState;
 	private final Attribute[] attributes;
-	
-	public DoorLockCluster(ZigBeeEndpoint zbDevice){
+
+	private class OTAListenerNotifier implements ClusterListener {
+
+		public void handleCluster(ZigBeeEndpoint endpoint, ClusterMessage c) {
+			try {
+				ResponseImpl response = new ResponseImpl(c, ID);
+				byte commandID = response.getHeaderCommandId();
+				switch(commandID){
+					case COMMAND_QUERY_NEXT_IMAGE_REQ:
+						this.processQueryNextImageReq(response);
+						break;
+				}
+			} catch (ZigBeeClusterException e) {
+				e.printStackTrace();
+			}
+		}
+
+		private Status processQueryNextImageReq(ResponseImpl response) throws ZigBeeClusterException {
+			int payloadLength = response.getPayload().length;
+			if (payloadLength <= OTA.PAYLOAD_MAX_LEN_QUERY_NEXT_IMAGE_REQ
+					&& payloadLength >= PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ)
+				return Status.MALFORMED_COMMAND;
+
+			//send the response
+
+			//TODO: send actual values
+			invoke(new OTACommandImpl(new OTAQueryImageResponse(new OTAFileID(1,2,3), 4)));
+
+			return Status.SUCCESS;
+		}
+
+		public ClusterFilter getClusterFilter() {
+			return OTAClusterFilter.FILTER;
+		}
+
+		public void setClusterFilter(ClusterFilter filter) {
+		}
+	}
+
+	public OTACluster(ZigBeeEndpoint zbDevice){
 		super(zbDevice);
 		
 		description = new AttributeImpl(zbDevice,this, Attributes.DESCRIPTION);
-		lockState = new AttributeImpl(zbDevice,this, Attributes.LOCK_STATE);
-		doorState = new AttributeImpl(zbDevice,this, Attributes.DOOR_STATE);
-		attributes = new AttributeImpl[]{description, lockState, doorState};
+		attributes = new AttributeImpl[]{description};
 	}
 
-	public DoorLockResponse lock() throws ZigBeeClusterException {
-		 enableDefaultResponse();
-	     Response response = invoke(new DoorCommandImpl(true));
-	     return new DoorLockResponseImpl(response);
-	}
-	
-	public DoorLockResponse lock(String pinCode) throws ZigBeeClusterException {
-		 enableDefaultResponse();
-	     Response response = invoke(new DoorCommandImpl(true, pinCode));
-	     return new DoorLockResponseImpl(response);
-	}
+	public void sendImageNotify()
+	{
 
-	public DoorLockResponse unlock(String pinCode) throws ZigBeeClusterException {
-		enableDefaultResponse();
-		Response response = invoke(new DoorCommandImpl(false, pinCode));
-		return new DoorLockResponseImpl(response);
 	}
 
 	@Override
 	public short getId() {
-		return DoorLock.ID;
+		return OTA.ID;
 	}
 
 	@Override
 	public String getName() {
-		return DoorLock.NAME;
+		return OTA.NAME;
 	}
 
 	@Override
