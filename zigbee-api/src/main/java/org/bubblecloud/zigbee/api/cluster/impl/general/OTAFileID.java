@@ -3,24 +3,36 @@ package org.bubblecloud.zigbee.api.cluster.impl.general;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * Created by yaronshani on 4/3/15.
  */
 public class OTAFileID {
-    private byte[] manufacturer;
-    private byte[] type;
-    private byte[] version;
+    private int manufacturer;
+    private int type;
+    private int version;
 
     public OTAFileID(int manufacturer, int type, int version)
     {
-        this.manufacturer = ByteBuffer.allocate(2).putInt(manufacturer).array();
-        this.type = ByteBuffer.allocate(2).putInt(type).array();
-        this.version = ByteBuffer.allocate(4).putInt(version).array();
+        this.manufacturer = manufacturer;
+        this.type = type;
+        this.version = version;
+    }
+
+    public OTAFileID(byte[] payload)
+    {
+        this.manufacturer = ByteBuffer.wrap(payload, 0, 2).getInt();
+        this.type = ByteBuffer.wrap(payload, 2, 2).getInt();
+        this.version = ByteBuffer.wrap(payload, 4, 4).getInt();
     }
 
     public byte[] getPayload()
     {
-        return ArrayUtils.addAll(ArrayUtils.addAll(this.manufacturer, this.type),this.version);
+        byte[] manufacturer, type, version;
+        manufacturer = ByteBuffer.allocate(2).putInt(this.manufacturer).array();
+        type = ByteBuffer.allocate(2).putInt(this.type).array();
+        version = ByteBuffer.allocate(4).putInt(this.version).array();
+        return ArrayUtils.addAll(ArrayUtils.addAll(manufacturer, type), version);
     }
 }

@@ -65,10 +65,12 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 					&& payloadLength >= PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ)
 				return Status.MALFORMED_COMMAND;
 
-			//send the response
+			//parse the request
+			OTAQueryImageRequest queryImageRequest = new OTAQueryImageRequest(response.getPayload());
 
+			//send the response
 			//TODO: send actual values
-			invoke(new OTACommandImpl(new OTAQueryImageResponse(new OTAFileID(1,2,3), 4)));
+			invoke(new OTACommandImpl(new OTAQueryImageResponse(OTA.NO_IMAGE,queryImageRequest.fileID, 0)));
 
 			return Status.SUCCESS;
 		}
