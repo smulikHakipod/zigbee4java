@@ -1,4 +1,4 @@
-package org.bubblecloud.zigbee.api.cluster.impl.general;
+package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;

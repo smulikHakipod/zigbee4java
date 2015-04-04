@@ -20,10 +20,9 @@
    limitations under the License.
 */
 
-package org.bubblecloud.zigbee.api.cluster.impl.general;
+package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.general.OTA;
-import org.bubblecloud.zigbee.api.cluster.impl.core.ZCLFrame;
 import org.bubblecloud.zigbee.network.ClusterFilter;
 import org.bubblecloud.zigbee.network.ClusterMessage;
 

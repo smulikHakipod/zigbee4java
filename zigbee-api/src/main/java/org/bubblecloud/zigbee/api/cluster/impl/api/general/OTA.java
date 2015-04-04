@@ -24,8 +24,7 @@ package org.bubblecloud.zigbee.api.cluster.impl.api.general;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZCLCluster;
-import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
-import org.bubblecloud.zigbee.api.cluster.impl.general.OTAFirmware;
+import org.bubblecloud.zigbee.api.cluster.impl.general.OTA.OTAFirmware;
 
 
 /**

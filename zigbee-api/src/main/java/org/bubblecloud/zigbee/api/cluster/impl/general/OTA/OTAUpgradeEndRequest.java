@@ -1,10 +1,6 @@
-package org.bubblecloud.zigbee.api.cluster.impl.general;
+package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
-import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeType;
-
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 /**
  * Created by yaronshani on 4/3/15.
@@ -12,10 +8,10 @@ import java.util.Arrays;
 public class OTAUpgradeEndRequest extends OTACommand{
 
     @OTAFieldType(type = ZigBeeType.Data8bit, index = 0)
-    Object status;
+    public Object status;
 
     @OTAFieldType(index = 1)
-    OTAFileID fileID;
+    public OTAFileID fileID;
 
     public OTAUpgradeEndRequest(Object status, OTAFileID fileID) {
         this.status = status;

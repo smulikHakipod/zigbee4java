@@ -1,10 +1,6 @@
-package org.bubblecloud.zigbee.api.cluster.impl.general;
+package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
-import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeType;
-
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 /**
  * Created by yaronshani on 4/3/15.
@@ -12,22 +8,22 @@ import java.util.Arrays;
 public class OTAImageBlockRequest extends OTACommand {
 
     @OTAFieldType(type = ZigBeeType.Data8bit, index = 0)
-    Object fieldControl;
+    public Object fieldControl;
 
     @OTAFieldType(index = 1)
-    OTAFileID fileID;
+    public OTAFileID fileID;
 
     @OTAFieldType(type= ZigBeeType.Data32bit, index=2)
-    Object fileOffset;
+    public Object fileOffset;
 
     @OTAFieldType(type= ZigBeeType.Data8bit, index=3)
-    Object maxDataSize;
+    public Object maxDataSize;
 
     @OTAFieldType(type= ZigBeeType.IEEEAddress, index=4)
-    Object[] nodeAddr;
+    public Object[] nodeAddr;
 
     @OTAFieldType(type= ZigBeeType.Data16bit, index=5)
-    Object blockReqDelay;
+    public Object blockReqDelay;
 
 
     public OTAImageBlockRequest(Object fieldControl, OTAFileID fileID, Object fileOffset, Object maxDataSize, Object[] nodeAddr, Object blockReqDelay) {

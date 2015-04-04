@@ -1,12 +1,10 @@
-package org.bubblecloud.zigbee.api.cluster.impl.general;
+package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZBDeserializer;
-import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeType;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ByteArrayOutputStreamSerializer;
 import org.bubblecloud.zigbee.api.cluster.impl.core.DefaultDeserializer;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
