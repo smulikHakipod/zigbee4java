@@ -28,6 +28,7 @@ import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
 import org.bubblecloud.zigbee.api.cluster.impl.api.general.OTA;
 import org.bubblecloud.zigbee.api.cluster.impl.attribute.Attributes;
 import org.bubblecloud.zigbee.api.cluster.impl.core.AttributeImpl;
+import org.bubblecloud.zigbee.api.cluster.impl.core.DefaultDeserializer;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ResponseImpl;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ZCLClusterBase;
 import org.bubblecloud.zigbee.network.ClusterFilter;
@@ -44,8 +45,6 @@ import java.util.List;
 
 
 public class OTACluster extends ZCLClusterBase implements OTA{
-
-
 
 	private static AttributeImpl description;
 	private final Attribute[] attributes;
@@ -104,14 +103,14 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 			//TODO: get the right index from the list instead of the first one
 			// get the firmware part
 			byte[] chunkFirmware = Arrays.copyOfRange(firmwareList.get(0).firmwareContent,
-					imageBlockRequest.fileOffset,
-					imageBlockRequest.maxDataSize-1);
+					(Integer)imageBlockRequest.fileOffset,
+					(Integer)(imageBlockRequest.maxDataSize)-1);
 
 			try {
 				// send the firmware chunk
 				invoke(new OTAImageBlockResponse((byte) Status.SUCCESS.id, imageBlockRequest.fileID,
 						imageBlockRequest.fileOffset,
-						(byte) (imageBlockRequest.maxDataSize - 1),
+						(byte)((Integer)imageBlockRequest.maxDataSize - 1),
 						chunkFirmware));
 			} catch (ZigBeeClusterException e) {
 				e.printStackTrace();

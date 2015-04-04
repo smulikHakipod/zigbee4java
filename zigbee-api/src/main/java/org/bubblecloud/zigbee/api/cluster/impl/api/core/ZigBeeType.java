@@ -32,7 +32,7 @@ import java.util.Hashtable;
 public enum ZigBeeType {
 
     //TODO Add missing data types
-
+    NULL(0x0, 0, false, void.class),
     Boolean(0x10, 1, false, Boolean.class),
     Data8bit(0x08, 1, false, Integer.class),
     Data16bit(0x09, 2, false, Integer.class),
