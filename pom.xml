@@ -57,6 +57,7 @@
                 <module>zigbee-serial-android</module>
                 <module>zigbee-console-android</module>
                 <module>zigbee-console-common</module>
+                <module>zigbee-web-api</module>
             </modules>
         </profile>
         <profile>
@@ -73,6 +74,7 @@
                 <module>zigbee-serial-javase</module>
                 <module>zigbee-console-javase</module>
                 <module>zigbee-console-common</module>
+                <module>zigbee-web-api</module>
             </modules>
         </profile>
         <profile>
@@ -90,6 +92,7 @@
                 <module>zigbee-serial-android</module>
                 <module>zigbee-console-javase</module>
                 <module>zigbee-console-common</module>
+                <module>zigbee-web-api</module>
             </modules>
         </profile>
     </profiles>
