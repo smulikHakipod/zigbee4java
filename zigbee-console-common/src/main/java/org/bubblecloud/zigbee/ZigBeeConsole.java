@@ -14,6 +14,10 @@ import org.bubblecloud.zigbee.api.cluster.impl.api.core.ReportListener;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Reporter;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
 import org.bubblecloud.zigbee.api.cluster.general.ColorControl;
+import org.bubblecloud.zigbee.api.cluster.impl.general.OTA.OTAFirmware;
+import org.bubblecloud.zigbee.api.cluster.impl.general.OTACluster;
+import org.bubblecloud.zigbee.api.device.generic.OTA;
+import org.bubblecloud.zigbee.api.device.impl.OTADevice;
 import org.bubblecloud.zigbee.network.impl.ZigBeeNetworkManagerException;
 import org.bubblecloud.zigbee.network.port.ZigBeePort;
 import org.bubblecloud.zigbee.network.model.DiscoveryMode;
@@ -77,6 +81,7 @@ public final class ZigBeeConsole {
 		commands.put("read", 		new ReadCommand());
 		commands.put("write", 		new WriteCommand());
 		commands.put("door", 		new DoorCommand());
+        commands.put("ota", 		new OTACommand());
 		
 	}
 
@@ -747,7 +752,45 @@ public final class ZigBeeConsole {
         }
     }
 
-    
+
+    /**
+     * Switches a device off.
+     */
+    private class OTACommand implements ConsoleCommand {
+        /**
+         * {@inheritDoc}
+         */
+        public String getDescription() {
+            return "Switches door off.";
+        }
+        /**
+         * {@inheritDoc}
+         */
+        public String getSyntax() {
+            return "ota DEVICEID";
+        }
+        /**
+         * {@inheritDoc}
+         */
+        public boolean process(final ZigBeeApi zigbeeApi, final String[] args) {
+            if (args.length != 2) {
+                return false;
+            }
+
+            final OTADevice device = (OTADevice)getDeviceByIndexOrEndpointId(zigbeeApi, args[1]);
+            if (device == null) {
+                return false;
+            }
+            //final org.bubblecloud.zigbee.api.cluster.general.OTA ota = device.getCluster(org.bubblecloud.zigbee.api.cluster.general.OTA.class);
+
+            device.ota.sendImageNotify(new OTAFirmware(0, 0, 0, 0, "/Users/yaronshani/Downloads/Z-Stack Sample Applications (2).pdf"));
+
+
+            return true;
+        }
+    }
+
+
     /**
      * Switches a device off.
      */
