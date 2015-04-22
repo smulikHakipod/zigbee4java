@@ -1,6 +1,8 @@
 package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeType;
+import org.bubblecloud.zigbee.api.device.generic.OTA;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -8,13 +10,16 @@ import java.util.Arrays;
 /**
  * Created by yaronshani on 4/3/15.
  */
-public class OTAFileID {
-    public int manufacturer;
-    public int type;
-    public int version;
+public class OTAFileID extends OTACommand{
 
-    public OTAFileID(int manufacturer, int type, int version)
-    {
+    @OTAFieldType(type= ZigBeeType.Data16bit, index=0)
+    public Object manufacturer;
+    @OTAFieldType(type= ZigBeeType.Data16bit, index=1)
+    public Object type;
+    @OTAFieldType(type= ZigBeeType.Data32bit, index=2)
+    public Object version;
+
+    public OTAFileID(int manufacturer, int type, int version) {
         this.manufacturer = manufacturer;
         this.type = type;
         this.version = version;
@@ -22,17 +27,11 @@ public class OTAFileID {
 
     public OTAFileID(byte[] payload)
     {
-        this.manufacturer = ByteBuffer.wrap(payload, 0, 2).getInt();
-        this.type = ByteBuffer.wrap(payload, 2, 2).getInt();
-        this.version = ByteBuffer.wrap(payload, 4, 4).getInt();
+        super(payload);
     }
 
-    public byte[] getPayload()
+    public OTAFileID()
     {
-        byte[] manufacturer, type, version;
-        manufacturer = ByteBuffer.allocate(2).putInt(this.manufacturer).array();
-        type = ByteBuffer.allocate(2).putInt(this.type).array();
-        version = ByteBuffer.allocate(4).putInt(this.version).array();
-        return ArrayUtils.addAll(ArrayUtils.addAll(manufacturer, type), version);
+        super();
     }
 }

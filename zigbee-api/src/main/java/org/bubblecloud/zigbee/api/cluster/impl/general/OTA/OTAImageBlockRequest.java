@@ -16,22 +16,22 @@ public class OTAImageBlockRequest extends OTACommand {
     @OTAFieldType(type= ZigBeeType.Data32bit, index=2)
     public Object fileOffset;
 
-    @OTAFieldType(type= ZigBeeType.Data8bit, index=3)
+    @OTAFieldType(type= ZigBeeType.UnsignedInteger8bit, index=3)
     public Object maxDataSize;
 
-    @OTAFieldType(type= ZigBeeType.IEEEAddress, index=4)
-    public Object[] nodeAddr;
+    //@OTAFieldType(type= ZigBeeType.Data8bit, index=4)
+    //public Object nodeAddr;
 
     @OTAFieldType(type= ZigBeeType.Data16bit, index=5)
     public Object blockReqDelay;
 
 
-    public OTAImageBlockRequest(Object fieldControl, OTAFileID fileID, Object fileOffset, Object maxDataSize, Object[] nodeAddr, Object blockReqDelay) {
+    public OTAImageBlockRequest(Object fieldControl, OTAFileID fileID, Object fileOffset, Object maxDataSize, Object blockReqDelay) {
         this.fieldControl = fieldControl;
         this.fileID = fileID;
         this.fileOffset = fileOffset;
         this.maxDataSize = maxDataSize;
-        this.nodeAddr = nodeAddr;
+        //this.nodeAddr = nodeAddr;
         this.blockReqDelay = blockReqDelay;
     }
 

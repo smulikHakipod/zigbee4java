@@ -16,7 +16,7 @@ public class OTAQueryImageResponse extends OTACommand {
     @OTAFieldType(index = 1)
     public OTAFileID fileID;
 
-    @OTAFieldType(type = ZigBeeType.Data16bit, index = 2)
+    @OTAFieldType(type = ZigBeeType.Data32bit, index = 2)
     public Object imageSize;
 
 

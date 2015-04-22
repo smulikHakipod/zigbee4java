@@ -28,4 +28,9 @@ public class OTAQueryImageRequest extends OTACommand {
     {
         super(payload);
     }
+
+    public OTAQueryImageRequest()
+    {
+        super();
+    }
 }

@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
 /**
  * Created by yaronshani on 4/4/15.
  */
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OTAFieldType {
     boolean serializable() default true;

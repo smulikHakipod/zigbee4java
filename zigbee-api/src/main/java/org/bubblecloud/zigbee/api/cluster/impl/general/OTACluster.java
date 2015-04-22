@@ -22,6 +22,7 @@
 
 package org.bubblecloud.zigbee.api.cluster.impl.general;
 
+import org.bubblecloud.zigbee.api.cluster.impl.ClusterMessageImpl;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Attribute;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Status;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeClusterException;
@@ -36,6 +37,7 @@ import org.bubblecloud.zigbee.network.ClusterListener;
 import org.bubblecloud.zigbee.network.ClusterMessage;
 import org.bubblecloud.zigbee.network.ZigBeeEndpoint;
 import org.bubblecloud.zigbee.network.impl.ZigBeeNetworkManagerException;
+import org.bubblecloud.zigbee.util.Threaded;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,12 +53,13 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 	private OTAListenerNotifier bridge;
 	private List<OTAFirmware> firmwareList = new ArrayList<OTAFirmware>();
 
-	private class OTAListenerNotifier implements ClusterListener {
+	public class OTAListenerNotifier implements ClusterListener {
 
 		public void handleCluster(ZigBeeEndpoint endpoint, ClusterMessage c) {
 			try {
 				ResponseImpl response = new ResponseImpl(c, ID);
 				byte commandID = response.getHeaderCommandId();
+
 				//TODO: implement page request
 				switch(commandID){
 					case COMMAND_QUERY_NEXT_IMAGE_REQ:
@@ -76,16 +79,28 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 
 		private Status processQueryNextImageReq(ResponseImpl response) throws ZigBeeClusterException {
 			int payloadLength = response.getPayload().length;
-			if (payloadLength <= OTA.PAYLOAD_MAX_LEN_QUERY_NEXT_IMAGE_REQ
-					&& payloadLength >= PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ)
+			if (payloadLength < OTA.PAYLOAD_MAX_LEN_QUERY_NEXT_IMAGE_REQ
+					&& payloadLength > PAYLOAD_MIN_LEN_QUERY_NEXT_IMAGE_REQ)
 				return Status.MALFORMED_COMMAND;
 
 			//parse the request
-			OTAQueryImageRequest queryImageRequest = new OTAQueryImageRequest(response.getPayload());
+			final OTAQueryImageRequest queryImageRequest = new OTAQueryImageRequest(response.getPayload());
+			//OTACluster.this.
 
+			//OTACluster.this.tempO = new OTAQueryImageRequest(response.getPayload());
+
+
+			//Thread.currentThread().getThreadGroup().getParent().
 			//send the response
 			//TODO: send actual values
-			invoke(new OTAQueryImageResponse(OTA.NO_IMAGE,queryImageRequest.fileID, 0));
+
+			//try {
+
+			OTACluster.this.invoke(new OTAQueryImageResponse(Status.SUCCESS.id, queryImageRequest.fileID, firmwareList.get(0).firmwareContent.length));
+
+			//} catch (ZigBeeNetworkManagerException e) {
+			//	e.printStackTrace();
+			//}
 
 			return Status.SUCCESS;
 		}
@@ -93,8 +108,8 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 		private Status processImageBlockReq(ResponseImpl response)
 		{
 			int payloadLength = response.getPayload().length;
-			if (payloadLength <= OTA.PAYLOAD_MAX_LEN_IMAGE_BLOCK_REQ
-					&& payloadLength >= PAYLOAD_MIN_LEN_IMAGE_BLOCK_REQ)
+			if (payloadLength > OTA.PAYLOAD_MAX_LEN_IMAGE_BLOCK_REQ
+					&& payloadLength < PAYLOAD_MIN_LEN_IMAGE_BLOCK_REQ)
 				return Status.MALFORMED_COMMAND;
 
 			//parse the request
@@ -102,19 +117,38 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 
 			//TODO: get the right index from the list instead of the first one
 			// get the firmware part
-			byte[] chunkFirmware = Arrays.copyOfRange(firmwareList.get(0).firmwareContent,
-					(Integer)imageBlockRequest.fileOffset,
-					(Integer)(imageBlockRequest.maxDataSize)-1);
 
-			try {
+
+
+			byte[] chunkFirmware;
+			if ((((Integer)imageBlockRequest.fileOffset) + (Integer)(imageBlockRequest.maxDataSize)-1)
+					< firmwareList.get(0).firmwareContent.length)
+			{
+
+				chunkFirmware = Arrays.copyOfRange(firmwareList.get(0).firmwareContent,
+					(Integer) imageBlockRequest.fileOffset,
+					(Integer)(imageBlockRequest.maxDataSize) + (Integer)imageBlockRequest.fileOffset);
+			} else {
+				chunkFirmware = Arrays.copyOfRange(firmwareList.get(0).firmwareContent,
+						(Integer) imageBlockRequest.fileOffset,
+						(Integer)firmwareList.get(0).firmwareContent.length - (Integer)imageBlockRequest.fileOffset);
+			}
+			//try {
 				// send the firmware chunk
-				invoke(new OTAImageBlockResponse((byte) Status.SUCCESS.id, imageBlockRequest.fileID,
+				logger.warn("OTA: FileOffsset: " + imageBlockRequest.fileOffset);
+				//enableDefaultResponse();
+				//enableDefaultResponse();
+			try {
+				OTACluster.this.invoke(new OTAImageBlockResponse((byte) Status.SUCCESS.id, imageBlockRequest.fileID,
 						imageBlockRequest.fileOffset,
-						(byte)((Integer)imageBlockRequest.maxDataSize - 1),
+						(byte)((Integer)imageBlockRequest.maxDataSize - 0),
 						chunkFirmware));
 			} catch (ZigBeeClusterException e) {
 				e.printStackTrace();
 			}
+			//} catch (ZigBeeClusterException e) {
+			//	e.printStackTrace();
+			//}
 
 			return Status.SUCCESS;
 		}
@@ -122,8 +156,8 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 		private Status processUpgradeEndReq(ResponseImpl response)
 		{
 			int payloadLength = response.getPayload().length;
-			if (payloadLength <= OTA.PAYLOAD_MAX_LEN_UPGRADE_END_REQ
-					&& payloadLength >= PAYLOAD_MIN_LEN_UPGRADE_END_REQ)
+			if (payloadLength < OTA.PAYLOAD_MAX_LEN_UPGRADE_END_REQ
+					&& payloadLength > PAYLOAD_MIN_LEN_UPGRADE_END_REQ)
 				return Status.MALFORMED_COMMAND;
 
 			//parse the request
@@ -150,15 +184,11 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 
 	public OTACluster(ZigBeeEndpoint zbDevice){
 		super(zbDevice);
-		
+
 		description = new AttributeImpl(zbDevice,this, Attributes.DESCRIPTION);
 		attributes = new AttributeImpl[]{description};
 		bridge = new OTAListenerNotifier();
-		try {
-			getZigBeeEndpoint().bindToLocal(ID);
-		} catch (ZigBeeNetworkManagerException e) {
-		}
-		getZigBeeEndpoint().addClusterListener(bridge);
+		firmwareList.add(new OTAFirmware(0, 0, 0, 0, "/Users/yaronshani/Downloads/5678-1234-00000001.zigbee"));
 	}
 
 	public void addNewFirmware(OTAFirmware firmware)
@@ -169,9 +199,17 @@ public class OTACluster extends ZCLClusterBase implements OTA{
 
 	public void sendImageNotify(OTAFirmware firmware)
 	{
+
+		try {
+			getZigBeeEndpoint().bindToLocal(ID);
+		} catch (ZigBeeNetworkManagerException e) {
+			e.printStackTrace();
+		}
+		getZigBeeEndpoint().addClusterListener(bridge);
+
 		OTAFileID fileID = new OTAFileID(0x0, 0xffff, 0xffffffff);
 		try {
-			invoke(new OTAImageNotifyRequest((byte)0x0,(byte)0x0, fileID));
+			invoke(new OTAImageNotifyRequest((byte) 0x0, (byte) 0x0, fileID));
 		} catch (ZigBeeClusterException e) {
 			e.printStackTrace();
 		}

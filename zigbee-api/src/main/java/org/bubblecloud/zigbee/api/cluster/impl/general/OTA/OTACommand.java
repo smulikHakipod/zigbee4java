@@ -2,8 +2,10 @@ package org.bubblecloud.zigbee.api.cluster.impl.general.OTA;
 
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.Command;
 import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZBDeserializer;
+import org.bubblecloud.zigbee.api.cluster.impl.api.core.ZigBeeType;
 import org.bubblecloud.zigbee.api.cluster.impl.core.ByteArrayOutputStreamSerializer;
 import org.bubblecloud.zigbee.api.cluster.impl.core.DefaultDeserializer;
+import org.bubblecloud.zigbee.network.ClusterMessage;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -15,7 +17,7 @@ import java.util.List;
 /**
  * Created by yaronshani on 4/3/15.
  */
-public class OTACommand implements Command {
+public abstract class OTACommand implements Command {
 
     private List<Object[]> sortedProperties;
 
@@ -31,15 +33,18 @@ public class OTACommand implements Command {
         for (Object[] fieldTypePair : this.sortedProperties) {
             OTAFieldType otaFieldType = (OTAFieldType)fieldTypePair[0];
             Field field = (Field)fieldTypePair[1];
-            if (otaFieldType.type() != null) {
+            if (otaFieldType.type() != ZigBeeType.NULL) {
                 try {
                     field.set(this, deserializer.readZigBeeType(otaFieldType.type()));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    //field.set(this,null);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             } else {
                 try {
-                    OTACommand cmd = (OTACommand)(field.get(this));
+                    Constructor constructor = field.getType().getDeclaredConstructor(new Class[]{});
+                    OTACommand cmd = (OTACommand)constructor.newInstance();
                     int classLength = cmd.getClassByteLength();
                     byte[] classPayload = new byte[classLength];
                     for(int i=0;i<classLength;i++) {
@@ -48,7 +53,7 @@ public class OTACommand implements Command {
                     Class[] constructArg = {
                             byte[].class
                     };
-                    Constructor constructor = cmd.getClass().getDeclaredConstructor(constructArg);
+                    constructor = cmd.getClass().getDeclaredConstructor(constructArg);
                     field.set(this, constructor.newInstance(classPayload));
 
                 } catch (NoSuchMethodException e) {
@@ -65,15 +70,24 @@ public class OTACommand implements Command {
     }
 
     public byte[] getAllowedResponseId() {
-        return new byte[0];
+        return new byte[] { };
     }
 
     public byte getHeaderCommandId() {
+        for(Field f : this.getClass().getDeclaredFields()) {
+            if(f.getName() == "id") {
+                try {
+                    return f.getByte(this);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return 0;
     }
 
     public boolean isClusterSpecific() {
-        return false;
+        return true;
     }
 
     public boolean isManufacturerExtension() {
@@ -90,16 +104,16 @@ public class OTACommand implements Command {
 
     private List<Object[]> getAllSortedProperties()
     {
-        Class cl = this.getClass().getSuperclass();
+        Class cl = this.getClass();
         List<Object[]> otaFieldTypeList = new ArrayList<Object[]>();
-        while(cl.getName() != "java.lang.Object") {
-            for (Field f : cl.getClass().getDeclaredFields()) {
-                if (f.getAnnotation(OTAFieldType.class) != null ) {
-                    otaFieldTypeList.add(new Object[]{f.getAnnotation(OTAFieldType.class), f});
-                }
+        //while(cl.getName() != "java.lang.Object") {
+        for (Field f : cl.getDeclaredFields()) {
+            if (f.getAnnotation(OTAFieldType.class) != null ) {
+                otaFieldTypeList.add(new Object[]{f.getAnnotation(OTAFieldType.class), f});
             }
-            cl = cl.getSuperclass();
         }
+            //cl = cl.getSuperclass();
+        //}
 
         otaFieldTypeList.sort(new Comparator<Object[]>() {
             public int compare(Object[] o1, Object[] o2) {
@@ -136,7 +150,7 @@ public class OTACommand implements Command {
         for (Object[] fieldTypePair : this.sortedProperties) {
             OTAFieldType otaFieldType = (OTAFieldType)fieldTypePair[0];
             Field field = (Field)fieldTypePair[1];
-            if (otaFieldType.type() != null) {
+            if (otaFieldType.type() != ZigBeeType.NULL) {
                 try {
                     byteArrayOutputStreamSerializer.appendZigBeeType(field.get(this), otaFieldType.type());
                 } catch (IllegalAccessException e) {
@@ -153,7 +167,7 @@ public class OTACommand implements Command {
                         }
                     } else {
 
-                        Command cmd = (Command)(field.get(this));
+                        OTACommand cmd = (OTACommand)(field.get(this));
                         localPayload = cmd.getPayload();
 
                         for(int i=0;i<localPayload.length;i++) {
