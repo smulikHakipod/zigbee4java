@@ -551,7 +551,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint, ApplicationFrameworkM
         }
     }
 
-    public void notify(AF_INCOMING_MSG msg) {
+    public void notify(final AF_INCOMING_MSG msg) {
         //THINK Do the notification in a separated Thread?
         //THINK Should consume messages only if they were sent from this device?!?!
         if (msg.isError()) return;
@@ -573,7 +573,11 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint, ApplicationFrameworkM
         if (msg.getSrcAddr() != node.getNetworkAddress()) return;
         if (msg.getSrcEndpoint() != endPointAddress) return;
         logger.debug("Notifying cluster listener for received by {}", endpointId);
-        notifyClusterListener(new ClusterMessageImpl(msg.getData(), msg.getClusterId()));
+        new Thread() {
+            public void run() {
+                notifyClusterListener(new ClusterMessageImpl(msg.getData(), msg.getClusterId()));
+            }
+        }.start();
     }
 
     public boolean addAFMessageConsumer(ApplicationFrameworkMessageConsumer consumer) {
